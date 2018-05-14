@@ -1,0 +1,16 @@
+<h2>Balances for account <%= @item.item_id %></h2>
+<a href="/" class="btn btn-primary">Back</a>
+<ul class="list-group mt-1">
+<% @item.accounts.each do |account| %>
+    <li class="list-group-item">
+      <div class="row">
+        <div class="col-md-6">
+          <a href="/account/<%= account.id %>"><%= account.name %></a>
+        </div>
+        <div class="col-md-6 text-right">
+          <%= account.balance_available %>
+        </div>
+      </div>
+    </li>
+<% end %>
+</ul>

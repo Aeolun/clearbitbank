@@ -1,0 +1,72 @@
+<h2>Account <%= @account.name %></h2>
+<a href="/item/<%= @account.item.id %>" class="btn btn-primary">Back</a>
+<ul class="list-group mt-1">
+  <li class="list-group-item">
+    <div class="row">
+      <div class="col-md-3">Current</div>
+      <div class="col-md-5"></div>
+      <div class="col-md-4 text-right"><span class="badge badge-info"><%= @account.balance_available %></span></div>
+    </div>
+  </li>
+<% @transactions.each do |transaction| %>
+    <li class="list-group-item">
+      <div class="row">
+        <div class="col-md-3"><%= transaction.date %></div>
+        <div class="col-md-5">
+          <% if not transaction.company.nil? %>
+            <a data-toggle="collapse" href="#transaction_<%= transaction.id %>"><%= transaction.name %></a>
+          <% else %>
+            <%= transaction.name %>
+          <% end %>
+
+          <% if transaction.pending %>
+            <span class="badge badge-info">Pending</span>
+          <% end %>
+          <% if transaction.recurring %>
+            <span class="badge badge-warning">Recurring</span>
+          <% end %>
+        </div>
+        <div class="col-md-4 text-right">
+          <span class="badge badge-<%= transaction.amount > 0 ? "danger" : "success" %>">
+            <%= transaction.amount * -1 %>
+          </span>
+        </div>
+      </div>
+      <% unless transaction.company.nil? %>
+        <div class="row collapse" id="transaction_<%= transaction.id %>">
+          <div class="col-md-2 mt-3">Domain</div>
+          <div class="col-md-4 mt-3 font-weight-bold">
+            <%= transaction.company.domain %>
+          </div>
+          <div class="col-md-2 mt-3">Name</div>
+          <div class="col-md-4 mt-3 font-weight-bold">
+            <%= transaction.company.name %>
+          </div>
+          <div class="col-md-2 mt-1">Legal Name</div>
+          <div class="col-md-4 mt-1 font-weight-bold">
+            <%= transaction.company.legal_name ? transaction.company.legal_name : transaction.company.name %>
+          </div>
+          <div class="col-md-2 mt-1">Sector</div>
+          <div class="col-md-4 mt-1 font-weight-bold">
+            <%= transaction.company.sector %>
+          </div>
+          <div class="col-md-2 mt-1">Industry Group</div>
+          <div class="col-md-4 mt-1 font-weight-bold">
+            <%= transaction.company.industry_group %>
+          </div>
+          <div class="col-md-2 mt-1">Industry</div>
+          <div class="col-md-4 mt-1 font-weight-bold">
+            <%= transaction.company.industry %>
+          </div>
+          <div class="col-md-12 mt-1 font-italic"><%= transaction.company.description %></div>
+        </div>
+      <% end %>
+    </li>
+<% end %>
+</ul>
+<style>
+    /* fix bug in bootstrap */
+    .row.collapse.show {
+        display:flex;
+    }
+</style>
